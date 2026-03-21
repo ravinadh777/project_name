@@ -1,0 +1,42 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: calculator-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /add(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: add-service
+                port:
+                  number: 3001
+          - path: /sub(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sub-service
+                port:
+                  number: 3002
+          - path: /mul(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: mul-service
+                port:
+                  number: 3003
+          - path: /div(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: div-service
+                port:
+                  number: 3004
+{{- end }}

@@ -1,0 +1,35 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - add-service
+          - sub-service
+          - mul-service
+          - div-service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        working-directory: services/${{ matrix.service }}
+        run: npm install
+
+      - name: Build Docker image
+        working-directory: services/${{ matrix.service }}
+        run: docker build -t ${{ matrix.service }}:pr-${{ github.run_number }} .

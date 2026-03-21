@@ -1,0 +1,12 @@
+{
+  "name": "div-service",
+  "version": "1.0.0",
+  "description": "Division microservice",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

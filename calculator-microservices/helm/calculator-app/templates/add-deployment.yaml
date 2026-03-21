@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: add-service
+spec:
+  replicas: {{ .Values.add.replicaCount }}
+  selector:
+    matchLabels:
+      app: add-service
+  template:
+    metadata:
+      labels:
+        app: add-service
+    spec:
+      containers:
+        - name: add-service
+          image: "{{ .Values.image.repository }}/add-service:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3001
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 20

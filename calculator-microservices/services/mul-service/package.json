@@ -1,0 +1,12 @@
+{
+  "name": "mul-service",
+  "version": "1.0.0",
+  "description": "Multiplication microservice",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

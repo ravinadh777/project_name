@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sub-service
+spec:
+  replicas: {{ .Values.sub.replicaCount }}
+  selector:
+    matchLabels:
+      app: sub-service
+  template:
+    metadata:
+      labels:
+        app: sub-service
+    spec:
+      containers:
+        - name: sub-service
+          image: "{{ .Values.image.repository }}/sub-service:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3002
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 10
+            periodSeconds: 20

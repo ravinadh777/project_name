@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: div-service
+spec:
+  replicas: {{ .Values.div.replicaCount }}
+  selector:
+    matchLabels:
+      app: div-service
+  template:
+    metadata:
+      labels:
+        app: div-service
+    spec:
+      containers:
+        - name: div-service
+          image: "{{ .Values.image.repository }}/div-service:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 3004
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 10
+            periodSeconds: 20
